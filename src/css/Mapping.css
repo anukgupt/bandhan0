@@ -1,0 +1,139 @@
+body {
+    font-family: "Segoe UI","-apple-system",BlinkMacSystemFont,Roboto,"Helvetica Neue",Helvetica,Ubuntu,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 16px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+}
+.full-size {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+} 
+.background-image {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    justify-content: center;
+}
+.outer {
+    padding-top: 8px;
+}
+.inner {
+    padding: 44px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin: 0 auto;
+    max-width: 440px;
+    min-width: 320px;
+    width: calc(100% - 40px);
+}
+.heading-text {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+.small-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: #586069;
+}
+.heading-container {
+    display: flex;
+    align-items: center;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+}
+.formitem-dropdown {
+    align-items: center;
+    display: flex;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 350px;
+}
+.formitem-button {
+    height: 20px;
+}
+.formitem-button-value {
+    float: left;
+}
+.formitem-dropdown-arrow {
+    float: right;
+    margin-top: 2px;
+}
+.input-radio {
+    margin-right: 10px;
+}
+.input-radio-label {
+    font-weight: 600;
+}
+.note {
+    margin-top: 0px;    
+}
+.subscription-filter-dropdown {
+    margin-top: 10px;
+}
+.formitem-selectmenu-item {
+    padding-left: 0px;
+}
+.heading-subscriptions-selected {
+    font-size: 12px!important;
+    color: #586069;
+}
+.subscription-item {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #e1e4e8;
+    margin-top: 5px;
+}
+.subscription-item-name {
+    width: 90%;
+}
+.subscription-cross-img-button {
+    border: none;
+    padding: 0;
+}
+.cross-img {
+    float: right; 
+}
+.link {
+    color: #005a9e;
+    cursor: pointer;
+    outline: transparent;
+    text-decoration: none;
+}
+.text-right {
+    text-align: right;
+}
+.bolt-button {
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-weight: 600;
+    padding: 6px 12px;
+    background-color: #0078d4;
+}
+.margin-top {
+    margin-top: 20px!important;;
+}
+.margin-bottom {
+    margin-bottom: 20px!important;;
+}
+input, select, textarea, button {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}  
+* {
+    box-sizing: inherit;
+}
+.errormsg {
+    color: red;
+    padding-left: 10px;
+}
+.successmsg {
+    color: green;
+    padding-left: 10px;
+}
