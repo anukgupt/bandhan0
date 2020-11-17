@@ -3,8 +3,9 @@ import { msalConfig } from '../config/Config';
 import { getTenants } from '../service/tenantService';
 import withAuthProvider from '../provider/AuthProvider';
 import Subscriptions from './Subscriptions';
-import { Dropdown, SelectMenu, Button } from '@primer/components';
+import { SelectMenu, Button } from '@primer/components';
 import down from '../images/downarrow.png';
+import * as Constants from "../Constants";
 
 interface TenantsState {
   tenants: {
@@ -27,7 +28,7 @@ class Tenants extends React.Component<any, TenantsState> {
 
   async componentDidMount() {
     try {
-      // this.props.clearState();
+      this.props.clearState();
       let accessToken = await this.props.getAccessToken('', msalConfig.scopes);
       let tenants = await getTenants(accessToken);
       this.setState({ tenants: tenants });
@@ -52,14 +53,14 @@ class Tenants extends React.Component<any, TenantsState> {
         </SelectMenu.Item>
       )
     return (
-      <div className="form">
-        <label className="formitem-label margin-bottom">Select your Azure Tenant</label>
+      <div>
+        <label className="formitem-label margin-bottom">{Constants.SelectAzureTenantLabel}</label>
         <SelectMenu className="formitem-dropdown margin-bottom">
           <Button as="summary" className="formitem-button">
             <span className="formitem-button-value small-text">{this.state.selectedTenant}</span>
-            <img className="formitem-dropdown-arrow down-img" alt="" src={down} width="16" height="16" />
+            <img className="formitem-dropdown-arrow down-img" alt="" src={down} width="16%" height="16%" />
           </Button>
-          <SelectMenu.Modal className="formitem-selectmenu-modal">
+          <SelectMenu.Modal>
             <SelectMenu.List>
               {options}
             </SelectMenu.List>

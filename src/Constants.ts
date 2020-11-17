@@ -1,0 +1,16 @@
+export const MicrosoftAzureHeading = "Microsoft Azure";
+export const GithubAppHeading = "Setup your Azure info for Bandhan";
+export const SaveButtonText = "Save";
+export const SelectAzureTenantLabel = "Select your Azure Tenant";
+export const AllSubscriptionsRadioButtonValue = "All Subscriptions";
+export const AllSubscriptionsRadioButtonNote = "This applies to all subscriptions.";
+export const SelectSubscriptionsRadioButtonValue = "Select Subscriptions";
+export const SelectSubscriptionsDropdownValue = "Only Select Subscriptions";
+export const DropdownFilterAriaLabel = "Search for a subscription";
+export const GithubAppDescription1 = "Choosing save means that you agree to our";
+export const TermsOfService = "Terms of Service";
+export const TermsOfServiceLink = "https://go.microsoft.com/fwlink/?LinkID=266231";
+export const PrivacyStatement = "Privacy Statement";
+export const PrivacyStatementLink = "https://go.microsoft.com/fwlink/?LinkID=264782";
+export const CodeOfConduct = "Code of Conduct";
+export const CodeOfConductLink = "https://aka.ms/vstscodeofconduct";

@@ -1,9 +1,9 @@
 import { handleResponse } from "./serviceHelper";
 
 export async function saveMapping(mappingInputs: { installationId: string; tenantId: string; subscriptionIds: any[]; }) {
-    var url = " https://bandhanv1.azurewebsites.net/api/installation-scopes";
+    var url = "https://localhost:44384/installationmapping";
     return fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: new Headers({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -11,7 +11,7 @@ export async function saveMapping(mappingInputs: { installationId: string; tenan
         body: JSON.stringify({
             "InstallationId": parseInt(mappingInputs.installationId),
             "TenantId": mappingInputs.tenantId,
-            "SubscriptionId": mappingInputs.subscriptionIds
+            "SubscriptionIds": mappingInputs.subscriptionIds
         })
     }).then(responseJson => {
         return handleResponse(responseJson);

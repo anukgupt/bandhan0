@@ -4,7 +4,7 @@ import { getSubscriptions } from '../service/subscriptionService';
 import withAuthProvider from '../provider/AuthProvider';
 import { Button, SelectMenu } from '@primer/components';
 import cross from '../images/cross.png';
-import Mapping from './Mapping';
+import * as Constants from "../Constants";
 
 interface SubscriptionParameters {
   subscriptions: any[],
@@ -13,7 +13,7 @@ interface SubscriptionParameters {
   currentTenantId: string,
   showSubscriptionFilter: boolean;
   subscriptionRadioButtonValue: string;
-  filteredSubscriptionValue: string;
+  searchValueForSubscriptions: string;
 }
 
 interface SubscriptionState {
@@ -23,15 +23,15 @@ interface SubscriptionState {
 export class Subscription extends React.Component<any, SubscriptionState> {
   constructor(props: any) {
     super(props);
-    //this.props.clearState();
+    this.props.clearState();
     let subscriptionParameters: SubscriptionParameters = {
       subscriptions: [],
       filteredSubscriptions: [],
       finalSubscriptionList: [],
       currentTenantId: '',
       showSubscriptionFilter: false,
-      subscriptionRadioButtonValue: "All Subscriptions",
-      filteredSubscriptionValue: ""
+      subscriptionRadioButtonValue: Constants.AllSubscriptionsRadioButtonValue,
+      searchValueForSubscriptions: ""
     }
     this.state = {
       subscriptionParameters: subscriptionParameters
@@ -41,6 +41,7 @@ export class Subscription extends React.Component<any, SubscriptionState> {
   setSubscriptionParameters(subscriptionParameters: SubscriptionParameters) {
     this.setState({ subscriptionParameters: subscriptionParameters });
   }
+
   async componentDidUpdate() {
     try {
       let subscriptionParameters = this.state.subscriptionParameters;
@@ -48,19 +49,21 @@ export class Subscription extends React.Component<any, SubscriptionState> {
         if (this.props.tenantId) {
           var accessToken = await this.props.getAccessToken(this.props.tenantId, msalConfig.azureApiScopes);
           var subscriptions = await getSubscriptions(accessToken);
-          // if (subscriptions && subscriptions.value && subscriptions.value.length > 0) {
-          //   this.props.setSubscriptionId(subscriptions.value[0].subscriptionId);
-          // }
           subscriptionParameters.subscriptions = subscriptions.value;
           subscriptionParameters.currentTenantId = this.props.tenantId;
           subscriptionParameters.filteredSubscriptions = subscriptions.value;
-          subscriptionParameters.finalSubscriptionList = [];
-          this.setSubscriptionParameters(subscriptionParameters);
+
         } else {
           subscriptionParameters.subscriptions = [];
           subscriptionParameters.currentTenantId = '';
-          this.setSubscriptionParameters(subscriptionParameters);
+          subscriptionParameters.filteredSubscriptions = [];
         }
+        subscriptionParameters.finalSubscriptionList = [];
+        subscriptionParameters.showSubscriptionFilter = false;
+        subscriptionParameters.subscriptionRadioButtonValue = Constants.AllSubscriptionsRadioButtonValue;
+        subscriptionParameters.searchValueForSubscriptions = "";
+        this.props.setSubscriptionIds(subscriptionParameters.subscriptions);
+        this.setSubscriptionParameters(subscriptionParameters);
       }
     }
     catch (err) {
@@ -70,7 +73,7 @@ export class Subscription extends React.Component<any, SubscriptionState> {
 
   render() {
     let options = this.state.subscriptionParameters.filteredSubscriptions && this.state.subscriptionParameters.filteredSubscriptions.length > 0 &&
-      this.state.subscriptionParameters.subscriptions.map(subs =>
+      this.state.subscriptionParameters.filteredSubscriptions.map(subs =>
         <SelectMenu.Item className="formitem-selectmenu-item" onClick={(event: any) => { this.onSelectingSubscription(event) }}>{subs.displayName}</SelectMenu.Item>
       );
     let finalList: any = [];
@@ -81,7 +84,7 @@ export class Subscription extends React.Component<any, SubscriptionState> {
           <Button type="button" aria-label="close menu" className="subscription-cross-img-button" onClick={() => {
             this.onRemovalOfSubscription(subs.displayName)
           }}>
-            <img className="cross-img" alt="" src={cross} width="10" height="10" />
+            <img className="cross-img" alt="" src={cross} width="10%" height="10%" />
           </Button>
         </div>
       )
@@ -89,26 +92,26 @@ export class Subscription extends React.Component<any, SubscriptionState> {
     return (
       <div>
         <div>
-          <td>
-            <label className="input-radio-label">
-              <input className="input-radio" type="radio" onChange={() => this.onAllSubscriptionsRadioButton()} checked={this.state.subscriptionParameters.subscriptionRadioButtonValue === "All Subscriptions"} value="All Subscriptions" />All Subscriptions
-                </label>
-          </td>
-          <p className="note small-text">This applies to all subscriptions.</p>
-          <td>
-            <label className="input-radio-label">
-              <input className="input-radio" type="radio" onChange={() => this.onSelectSubscriptionsRadionButon()} checked={this.state.subscriptionParameters.subscriptionRadioButtonValue === "Select Subscriptions"} value="Select Subscriptions" />Select Subscriptions
-                </label>
-          </td>
+          <label className="input-radio-label">
+            <input className="input-radio" type="radio" onChange={() => this.onAllSubscriptionsRadioButton()} checked={this.state.subscriptionParameters.subscriptionRadioButtonValue === Constants.AllSubscriptionsRadioButtonValue} value={Constants.AllSubscriptionsRadioButtonValue} />{Constants.AllSubscriptionsRadioButtonValue}
+          </label>
+        </div>
+        <p className="note small-text">{Constants.AllSubscriptionsRadioButtonNote}</p>
+        <div>
+          <label className="input-radio-label">
+            <input className="input-radio" type="radio" onChange={() => this.onSelectSubscriptionsRadionButon()} checked={this.state.subscriptionParameters.subscriptionRadioButtonValue === Constants.SelectSubscriptionsRadioButtonValue} value={Constants.SelectSubscriptionsRadioButtonValue} />{Constants.SelectSubscriptionsRadioButtonValue}
+          </label>
         </div>
         {
           this.state.subscriptionParameters.showSubscriptionFilter &&
           <SelectMenu className="subscription-filter-dropdown">
-            <Button as="summary">Only Select Subscriptions</Button>
+            <Button as="summary">{Constants.SelectSubscriptionsDropdownValue}</Button>
             <SelectMenu.Modal>
-              <SelectMenu.Filter onChange={(event: any) => { this.onFilteringSubscription(event.target.value) }} placeholder="Search for a subscription" value={this.state.subscriptionParameters.filteredSubscriptionValue} aria-label="Search for a subscription" />
+              <SelectMenu.Filter onChange={(event: any) => { this.onFilteringSubscription(event.target.value) }} placeholder={Constants.DropdownFilterAriaLabel} value={this.state.subscriptionParameters.searchValueForSubscriptions} aria-label={Constants.DropdownFilterAriaLabel} />
               <SelectMenu.List>
-                {options}
+                {
+                  options
+                }
               </SelectMenu.List>
             </SelectMenu.Modal>
           </SelectMenu>
@@ -128,7 +131,7 @@ export class Subscription extends React.Component<any, SubscriptionState> {
     )
   }
   filterSubscriptions(searchValue: string, subscriptionParameters: SubscriptionParameters): SubscriptionParameters {
-    let subs: any[] = [];
+    let filteredSubs: any[] = [];
     let isPresentInFinalList: boolean = false;
     subscriptionParameters.subscriptions.filter(sub => {
       isPresentInFinalList = false;
@@ -138,10 +141,10 @@ export class Subscription extends React.Component<any, SubscriptionState> {
         }
       });
       if (sub.displayName.toString().toLowerCase().indexOf(searchValue.toString().toLowerCase()) !== -1 && !isPresentInFinalList)
-        subs.push(sub);
+        filteredSubs.push(sub);
     });
-    subscriptionParameters.filteredSubscriptions = subs;
-    subscriptionParameters.filteredSubscriptionValue = searchValue;
+    subscriptionParameters.filteredSubscriptions = filteredSubs;
+    subscriptionParameters.searchValueForSubscriptions = searchValue;
     return subscriptionParameters;
   }
 
@@ -159,21 +162,23 @@ export class Subscription extends React.Component<any, SubscriptionState> {
     subs[subscriptionParameters.finalSubscriptionList.length] = tobeAddedSubscription[0];
     subscriptionParameters.finalSubscriptionList = subs;
     subscriptionParameters = this.filterSubscriptions("", subscriptionParameters);
-    this.props.setSubscriptionId(subscriptionParameters.finalSubscriptionList);
+    this.props.setSubscriptionIds(subscriptionParameters.finalSubscriptionList);
     this.setSubscriptionParameters(subscriptionParameters);
   }
 
   onAllSubscriptionsRadioButton() {
     let subscriptionParameters = this.state.subscriptionParameters;
-    subscriptionParameters.subscriptionRadioButtonValue = "All Subscriptions";
+    subscriptionParameters.subscriptionRadioButtonValue = Constants.AllSubscriptionsRadioButtonValue;
     subscriptionParameters.showSubscriptionFilter = false;
+    this.props.setSubscriptionIds(subscriptionParameters.subscriptions);
     this.setSubscriptionParameters(subscriptionParameters);
   }
 
   onSelectSubscriptionsRadionButon() {
     let subscriptionParameters = this.state.subscriptionParameters;
-    subscriptionParameters.subscriptionRadioButtonValue = "Select Subscriptions";
+    subscriptionParameters.subscriptionRadioButtonValue = Constants.SelectSubscriptionsRadioButtonValue;
     subscriptionParameters.showSubscriptionFilter = true;
+    this.props.setSubscriptionIds([]);
     this.setSubscriptionParameters(subscriptionParameters);
   }
 
@@ -190,7 +195,7 @@ export class Subscription extends React.Component<any, SubscriptionState> {
       subs.splice(indexToBeDeleted, 1);
       subscriptionParameters.finalSubscriptionList = subs;
       subscriptionParameters = this.filterSubscriptions("", subscriptionParameters);
-      this.props.setSubscriptionId(subscriptionParameters.finalSubscriptionList);
+      this.props.setSubscriptionIds(subscriptionParameters.finalSubscriptionList);
       this.setSubscriptionParameters(subscriptionParameters);
     }
   }

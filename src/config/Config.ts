@@ -13,8 +13,7 @@
 // };
 
 export const msalConfig = {
-    appId: 'a79fd610-c111-4b27-8bcb-d122bb624b96', //micorosft
-    // appId:'30c07770-63b4-4ccb-bd90-8c89bf58b889', //outlook
+    appId: 'a79fd610-c111-4b27-8bcb-d122bb624b96', 
     authority: 'https://login.microsoftonline.com/',
     //https://login.microsoftonline.com/organizations
     redirectUri: 'http://localhost:3000/',
