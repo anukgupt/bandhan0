@@ -47,13 +47,11 @@ export default function withAuthProvider<T extends React.Component<any>>
                 scopes: msalConfig.scopes,
                 authority: msalConfig.authority + 'common',
                 response_type: "code", //or id_token??
-                // promt: "admin_consent" prompt: "consent"
             }
             if (authority) {
                 userRequest.authority = authority;
             }
             try {
-                console.log("login");
                 let data = await this.userAgentApplication.loginPopup(userRequest);
                 this.setState({
                     isAuthenticated: true,

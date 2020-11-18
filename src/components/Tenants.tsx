@@ -11,7 +11,8 @@ interface TenantsState {
   tenants: {
     value: any[]
   },
-  selectedTenant: string
+  selectedTenantId: string,
+  selectedTenantName: string
 }
 
 class Tenants extends React.Component<any, TenantsState> {
@@ -22,13 +23,13 @@ class Tenants extends React.Component<any, TenantsState> {
       tenants: {
         value: []
       },
-      selectedTenant: ''
+      selectedTenantId: '',
+      selectedTenantName: ''
     };
   }
 
   async componentDidMount() {
     try {
-      this.props.clearState();
       let accessToken = await this.props.getAccessToken('', msalConfig.scopes);
       let tenants = await getTenants(accessToken);
       this.setState({ tenants: tenants });
@@ -40,14 +41,14 @@ class Tenants extends React.Component<any, TenantsState> {
   render() {
     let subscriptionProps: any = {
       ...this.props,
-      tenantId: this.state.selectedTenant
+      tenantId: this.state.selectedTenantId
     };
     var options = this.state.tenants && this.state.tenants.value &&
       this.state.tenants.value.length > 0 &&
       this.state.tenants.value.map(tenant =>
         <SelectMenu.Item className="formitem-selectmenu-item" onClick={() => {
           this.props.setTenantId(tenant.tenantId);
-          this.setState({ selectedTenant: tenant.displayName });
+          this.setState({ selectedTenantId: tenant.tenantId, selectedTenantName: tenant.displayName });
         }} key={tenant.tenantId}>
           {tenant.displayName}
         </SelectMenu.Item>
@@ -57,8 +58,8 @@ class Tenants extends React.Component<any, TenantsState> {
         <label className="formitem-label margin-bottom">{Constants.SelectAzureTenantLabel}</label>
         <SelectMenu className="formitem-dropdown margin-bottom">
           <Button as="summary" className="formitem-button">
-            <span className="formitem-button-value small-text">{this.state.selectedTenant}</span>
-            <img className="formitem-dropdown-arrow down-img" alt="" src={down} width="16%" height="16%" />
+            <span className="formitem-button-value small-text">{this.state.selectedTenantName}</span>
+            <img className="formitem-dropdown-arrow down-img" alt="" src={down} width="16px" height="16px" />
           </Button>
           <SelectMenu.Modal>
             <SelectMenu.List>

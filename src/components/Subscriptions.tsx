@@ -23,7 +23,6 @@ interface SubscriptionState {
 export class Subscription extends React.Component<any, SubscriptionState> {
   constructor(props: any) {
     super(props);
-    this.props.clearState();
     let subscriptionParameters: SubscriptionParameters = {
       subscriptions: [],
       filteredSubscriptions: [],
@@ -74,17 +73,17 @@ export class Subscription extends React.Component<any, SubscriptionState> {
   render() {
     let options = this.state.subscriptionParameters.filteredSubscriptions && this.state.subscriptionParameters.filteredSubscriptions.length > 0 &&
       this.state.subscriptionParameters.filteredSubscriptions.map(subs =>
-        <SelectMenu.Item className="formitem-selectmenu-item" onClick={(event: any) => { this.onSelectingSubscription(event) }}>{subs.displayName}</SelectMenu.Item>
+        <SelectMenu.Item key={subs.subscriptionId} className="formitem-selectmenu-item" onClick={(event: any) => { this.onSelectingSubscription(event) }}>{subs.displayName}</SelectMenu.Item>
       );
     let finalList: any = [];
     this.state.subscriptionParameters.finalSubscriptionList.map(subs => {
       finalList.push(
-        <div className="subscription-item">
+        <div key={subs.subscriptionId} className="subscription-item">
           <span className="subscription-item-name">{subs.displayName}</span>
           <Button type="button" aria-label="close menu" className="subscription-cross-img-button" onClick={() => {
             this.onRemovalOfSubscription(subs.displayName)
           }}>
-            <img className="cross-img" alt="" src={cross} width="10%" height="10%" />
+            <img className="cross-img" alt="" src={cross} width="10px" height="10px" />
           </Button>
         </div>
       )

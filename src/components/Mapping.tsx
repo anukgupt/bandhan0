@@ -60,7 +60,7 @@ class Mapping extends React.Component<any, MapingState> {
         this.setState({
             loading: true
         });
-        if (mappingInputs.installationId && mappingInputs.tenantId && mappingInputs.subscriptionIds) {
+        if (mappingInputs.installationId && mappingInputs.tenantId && mappingInputs.subscriptionIds && mappingInputs.subscriptionIds.length > 0) {
             saveMapping(mappingInputs).then(result => {
                 this.setState({
                     success: {
@@ -92,7 +92,7 @@ class Mapping extends React.Component<any, MapingState> {
         let propsToPass = {
             ...this.props,
             setTenantId: this.setTenantId,
-            setSubscriptionId: this.setSubscriptionIds
+            setSubscriptionIds: this.setSubscriptionIds
         }
         return (
             <div className="full-size">
